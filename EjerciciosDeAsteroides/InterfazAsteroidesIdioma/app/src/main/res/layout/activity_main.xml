@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.3"/>
 
     <Button
-        android:id="@+id/jugar"
+        android:id="@+id/btnJugar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -32,41 +32,41 @@
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <Button
-        android:id="@+id/configurar"
+        android:id="@+id/btnConfigurar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/configurar"
         android:layout_marginTop="10dp"
         android:textSize="20sp"
         app:cornerRadius="15px"
-        app:layout_constraintTop_toBottomOf="@+id/jugar"
+        app:layout_constraintTop_toBottomOf="@+id/btnJugar"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintEnd_toEndOf="@+id/title"
 
         />
 
     <Button
-        android:id="@+id/sobre"
+        android:id="@+id/btnSobre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/sobre"
         android:layout_marginTop="10dp"
         android:textSize="20sp"
         app:cornerRadius="15px"
-        app:layout_constraintTop_toBottomOf="@+id/configurar"
+        app:layout_constraintTop_toBottomOf="@+id/btnConfigurar"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintEnd_toEndOf="@+id/title"
         />
 
     <Button
-        android:id="@+id/salir"
+        android:id="@+id/btnSalir"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/salir"
         android:layout_marginTop="10dp"
         android:textSize="20sp"
         app:cornerRadius="15px"
-        app:layout_constraintTop_toBottomOf="@+id/sobre"
+        app:layout_constraintTop_toBottomOf="@+id/btnSobre"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintEnd_toEndOf="@+id/title"
         />
