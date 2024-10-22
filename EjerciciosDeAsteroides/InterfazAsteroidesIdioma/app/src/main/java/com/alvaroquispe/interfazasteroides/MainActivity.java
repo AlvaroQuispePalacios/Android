@@ -2,6 +2,7 @@ package com.alvaroquispe.interfazasteroides;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,17 +26,19 @@ public class MainActivity extends AppCompatActivity {
         btnSobre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Hola")
-                        .setMessage("Alvaro Quispe Palacios")
-                        .setCancelable(true)
-                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        })
-                        .show();
+                mostrarViewSobre(null);
+
+//                new AlertDialog.Builder(MainActivity.this)
+//                        .setTitle("Hola")
+//                        .setMessage("Alvaro Quispe Palacios")
+//                        .setCancelable(true)
+//                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                dialogInterface.cancel();
+//                            }
+//                        })
+//                        .show();
             }
         });
         //
@@ -52,4 +55,13 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
+
+    // ---------------------------------------------------------
+    public void mostrarViewSobre(View view){
+        Intent i = new Intent(this, Sobre.class);
+        startActivity(i);
+    }
+
+    // -------------------------------------------------------------
+
 }

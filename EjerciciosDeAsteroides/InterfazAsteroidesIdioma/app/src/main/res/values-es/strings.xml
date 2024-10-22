@@ -5,4 +5,6 @@
     <string name="configurar">Configuración</string>
     <string name="sobre">Sobre</string>
     <string name="salir">Salir</string>
+    <string name="infoAutor">Autor: Alvaro Quispe Palacios</string>
+    <!--    <string name="infoAutor">Creador</string>-->
 </resources>

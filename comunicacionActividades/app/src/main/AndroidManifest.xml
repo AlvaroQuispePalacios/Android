@@ -10,12 +10,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.InterfazAsteroides"
+        android:theme="@style/Theme.ComunicacionActividades"
         tools:targetApi="31">
         <activity
-            android:name=".Sobre"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+            android:name=".MainActivity2"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
