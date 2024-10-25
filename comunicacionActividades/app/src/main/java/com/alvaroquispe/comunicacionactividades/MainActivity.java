@@ -16,11 +16,15 @@ public class MainActivity extends AppCompatActivity {
     Button btnVerificar;
     TextView txtNombre;
     String nombre;
+    TextView respuestaDesdeM2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        respuestaDesdeM2 = findViewById(R.id.respuestaDesdeM2);
         btnVerificar = findViewById(R.id.verificar);
         btnVerificar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 mostrarViewActivity2(null);
             }
         });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -40,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
         txtNombre = (TextView) findViewById(R.id.editNombre);
         nombre = txtNombre.getText().toString();
         i.putExtra("nombre", nombre);
-        startActivity(i);
+        startActivityForResult(i, 1234);
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1234 && resultCode == RESULT_OK) {
+            String res = data.getStringExtra("respuesta");
+            respuestaDesdeM2.setText("Respuesta " + res);
+        }
     }
 }
