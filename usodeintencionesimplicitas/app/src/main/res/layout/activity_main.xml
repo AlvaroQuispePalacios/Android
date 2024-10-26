@@ -7,13 +7,50 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#7F59E0"
+            android:text="Intenciones Implicitas"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="20dp"
+            />
+        <Button
+            android:id="@+id/btnWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Abrir pagina web"/>
+        <Button
+            android:id="@+id/btnTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Llamada de telefono"/>
+        <Button
+            android:id="@+id/btnGoogleMaps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GoogleMaps"/>
+        <Button
+            android:id="@+id/btnFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hacer foto"/>
+        <Button
+            android:id="@+id/btnEnviarCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar Correo"/>
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
