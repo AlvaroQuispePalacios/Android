@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Hello World!"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <Button
+            android:id="@+id/btnArosOlimpicos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aros olimpicos"/>
+
+        <Button
+            android:id="@+id/btnActividad52"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actividad 5.2"/>
+        <Button
+            android:id="@+id/btnActividad53"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actividad 5.3"/>
+
+        <Button
+            android:id="@+id/btnActividad55"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actividad 5.5"/>
+
+        <Button
+            android:id="@+id/btnActividad56"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actividad 5.6"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
