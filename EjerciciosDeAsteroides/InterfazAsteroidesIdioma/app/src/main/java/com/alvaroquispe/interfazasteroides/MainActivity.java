@@ -20,12 +20,19 @@ public class MainActivity extends AppCompatActivity {
     public static ScoreStorage scoreStorage = new ScoreStorageList();
     Button btnScore;
     Button btnSobre;
-
+    Button btnJugar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        btnJugar = findViewById(R.id.btnJugar);
+        btnJugar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mostrarGameActivity(null);
+            }
+        });
 
         //
         btnSobre = findViewById(R.id.btnSobre);
@@ -59,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // ---------------------------------------------------------
+    public void mostrarGameActivity(View view){
+        Intent i = new Intent(this, GameActivity.class);
+        startActivity(i);
+    }
+
     public void showScores(View view){
         Intent i = new Intent(this, Scores.class);
         startActivity(i);
