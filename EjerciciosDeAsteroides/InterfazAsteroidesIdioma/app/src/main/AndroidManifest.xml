@@ -13,9 +13,15 @@
         android:theme="@style/Theme.InterfazAsteroides"
         tools:targetApi="31">
         <activity
+            android:name=".Scores"
+            android:exported="false" />
+        <activity
+            android:name=".PreferencesActivity"
+            android:exported="false" />
+        <activity
             android:name=".Sobre"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

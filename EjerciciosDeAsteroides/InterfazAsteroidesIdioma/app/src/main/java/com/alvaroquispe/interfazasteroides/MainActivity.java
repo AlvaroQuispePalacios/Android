@@ -17,7 +17,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnSalir;
+    public static ScoreStorage scoreStorage = new ScoreStorageList();
+    Button btnScore;
     Button btnSobre;
 
     @Override
@@ -36,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
         });
         //
 
-        btnSalir = findViewById(R.id.btnSalir);
-        btnSalir.setOnClickListener(new View.OnClickListener() {
+        btnScore = findViewById(R.id.btnPuntuacion);
+        btnScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                showScores(null);
             }
         });
 
@@ -57,22 +58,35 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // ---------------------------------------------------------
+    public void showScores(View view){
+        Intent i = new Intent(this, Scores.class);
+        startActivity(i);
+    }
+
+    public void mostrarViewSobre(View view){
+        Intent i = new Intent(this, Sobre.class);
+        startActivity(i);
+    }
+
+    public void launchPreferences(View view){
+        Intent i = new Intent(this, PreferencesActivity.class);
+        startActivity(i);
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id==R.id.preferences){
-        //arrancar activitat preferències
+            //arrancar activitat preferències
+            launchPreferences(null);
+            return true;
         }
         if (id == R.id.about){
-        //arrancar activitat sobre...
+            //arrancar activitat sobre...
+            mostrarViewSobre(null);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    // ---------------------------------------------------------
-    public void mostrarViewSobre(View view){
-        Intent i = new Intent(this, Sobre.class);
-        startActivity(i);
     }
 
     // -------------------------------------------------------------

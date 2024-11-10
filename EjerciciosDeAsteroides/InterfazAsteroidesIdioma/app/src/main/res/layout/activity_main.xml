@@ -59,10 +59,10 @@
         />
 
     <Button
-        android:id="@+id/btnSalir"
+        android:id="@+id/btnPuntuacion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/salir"
+        android:text="@string/puntuacion"
         android:layout_marginTop="10dp"
         android:textSize="20sp"
         app:cornerRadius="15px"

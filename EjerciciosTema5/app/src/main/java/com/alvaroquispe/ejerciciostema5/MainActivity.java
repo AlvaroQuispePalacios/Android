@@ -54,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
         btnActividad55.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                MostrarActividad55(null);
             }
         });
 
         btnActividad56.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                MostrarActividad56(null);
             }
         });
 
@@ -86,6 +86,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void MostrarActividad53(View view){
         Intent i = new Intent(this, Actividad5_3.class);
+        startActivity(i);
+    }
+
+    public void MostrarActividad55(View view){
+        Intent i = new Intent(this, Actividad5_5.class);
+        startActivity(i);
+    }
+
+    public void MostrarActividad56(View view){
+        Intent i = new Intent(this, Actividad5_6.class);
         startActivity(i);
     }
 }
