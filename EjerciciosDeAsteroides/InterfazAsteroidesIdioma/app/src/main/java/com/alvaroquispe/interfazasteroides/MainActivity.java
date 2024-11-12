@@ -1,13 +1,14 @@
 package com.alvaroquispe.interfazasteroides;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -18,6 +19,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
     public static ScoreStorage scoreStorage = new ScoreStorageList();
+    TextView textTitulo;
+    Button btnConfigurar;
     Button btnScore;
     Button btnSobre;
     Button btnJugar;
@@ -26,7 +29,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         btnJugar = findViewById(R.id.btnJugar);
+        btnSobre = findViewById(R.id.btnSobre);
+        btnScore = findViewById(R.id.btnPuntuacion);
+        btnConfigurar = findViewById(R.id.btnConfigurar);
+        textTitulo = findViewById(R.id.title);
+
+        Animation giroConZoom = AnimationUtils.loadAnimation(this, R.anim.gir_amb_zoom);
+        Animation aparecer = AnimationUtils.loadAnimation(this, R.anim.apareixer);
+        Animation desplazar = AnimationUtils.loadAnimation(this, R.anim.despl_dreta);
+        Animation aparecerDesplazar = AnimationUtils.loadAnimation(this, R.anim.aparecer_desplazamiento);
+
+        textTitulo.startAnimation(giroConZoom);
+        btnJugar.startAnimation(aparecer);
+        btnConfigurar.startAnimation(desplazar);
+        btnSobre.startAnimation(aparecerDesplazar);
+        btnScore.startAnimation(aparecerDesplazar);
+
         btnJugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,17 +54,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //
-        btnSobre = findViewById(R.id.btnSobre);
         btnSobre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnSobre.startAnimation(giroConZoom);
                 mostrarViewSobre(null);
             }
         });
-        //
 
-        btnScore = findViewById(R.id.btnPuntuacion);
         btnScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

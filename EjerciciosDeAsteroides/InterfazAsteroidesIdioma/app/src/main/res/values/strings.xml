@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">InterfazAsteroides</string>
+    <string name="app_name">Asteroides</string>
     <string name="jugar">Play</string>
     <string name="configurar">Configuration</string>
     <string name="sobre">About</string>
