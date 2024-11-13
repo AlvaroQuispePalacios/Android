@@ -1,5 +1,6 @@
 package com.alvaroquispe.examenrepaso;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.Image;
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class AnimacionActivity extends AppCompatActivity {
     Button btnComenzarAnimacion;
     Button btnDetenerAnimacion;
+    Button btnVolverAlInicioAnimacion;
     AnimationDrawable animacion;
     ImageView animacionImagenes;
 
@@ -26,9 +28,11 @@ public class AnimacionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_animacion);
+
         animacionImagenes = findViewById(R.id.animacionImagenes);
         btnComenzarAnimacion = findViewById(R.id.btnComenzarAnimacion);
         btnDetenerAnimacion = findViewById(R.id.btnDetenerAnimacion);
+        btnVolverAlInicioAnimacion = findViewById(R.id.btnVolverAlInicioAnimacion);
         animacion = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animacion);
 
         animacionImagenes.setImageDrawable(animacion);
@@ -44,6 +48,12 @@ public class AnimacionActivity extends AppCompatActivity {
                 animacion.stop();
             }
         });
+        btnVolverAlInicioAnimacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                VolverAlInicioAnimacion(null);
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -51,6 +61,9 @@ public class AnimacionActivity extends AppCompatActivity {
             return insets;
         });
     }
-
+    public void VolverAlInicioAnimacion(View view){
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+    }
 
 }
