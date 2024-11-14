@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,9 +21,16 @@ public class AnimacionActivity extends AppCompatActivity {
     Button btnComenzarAnimacion;
     Button btnDetenerAnimacion;
     Button btnVolverAlInicioAnimacion;
+    TextView tvContadorAnimacion;
 
     AnimationDrawable animacion;
     ImageView animacionImagenes;
+
+    Boolean a = false;
+    Long tiempoTotal = (long) 0;
+    Long tiempoInicio;
+    Long tiempoFinal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +42,33 @@ public class AnimacionActivity extends AppCompatActivity {
         btnComenzarAnimacion = findViewById(R.id.btnComenzarAnimacion);
         btnDetenerAnimacion = findViewById(R.id.btnDetenerAnimacion);
         btnVolverAlInicioAnimacion = findViewById(R.id.btnVolverAlInicioAnimacion);
-        animacion = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animacion);
+        tvContadorAnimacion = findViewById(R.id.tvContadorAnimacion);
 
+        animacion = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animacion);
         animacionImagenes.setImageDrawable(animacion);
+
         btnComenzarAnimacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animacion.start();
+                if(!animacion.isRunning()){
+                    animacion.start();
+                    tiempoInicio = System.currentTimeMillis();
+                }
             }
         });
         btnDetenerAnimacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animacion.stop();
+                if(animacion.isRunning()){
+                    animacion.stop();
+                    tiempoFinal = System.currentTimeMillis();
+                    tiempoTotal = (tiempoTotal + (tiempoFinal - tiempoInicio)) / 1000;
+                    tvContadorAnimacion.setText(tiempoTotal + "");
+                }
+
             }
         });
+
         btnVolverAlInicioAnimacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
