@@ -1,6 +1,7 @@
 package com.alvaroquispe.examenrepaso;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 int contador = Integer.parseInt(tvNumeroEjecucionesMapa.getText().toString());
                 contador++;
                 tvNumeroEjecucionesMapa.setText(Integer.toString(contador));
-
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:39.887642,4.254319"));
+                startActivity(intent);
             }
         });
 
@@ -76,10 +78,6 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("contadorVector", Integer.parseInt(tvNumeroEjecucionesVector.getText().toString()));
         startActivityForResult(i, 2);
     }
-//    public void MostrarAnimacionActivity(View view){
-//        Intent i = new Intent(this, AnimacionActivity.class);
-//        startActivity(i);
-//    }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);

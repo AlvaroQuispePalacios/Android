@@ -1,13 +1,12 @@
-package com.alvaroquispe.examenrepaso;
+package com.alvaroquispe.repasoexamen2;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +16,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class AnimacionActivity extends AppCompatActivity {
+    private Runnable runnable;
+    private Handler handler = new Handler();
+    private int contador = 0;
+
+    ImageView ivAnimacion;
+    AnimationDrawable animacion;
+
     Button btnComenzarAnimacion;
     Button btnDetenerAnimacion;
-    Button btnVolverAlInicioAnimacion;
+    Button btnVolverAMainActivityAnimacion;
 
-    AnimationDrawable animacion;
-    ImageView animacionImagenes;
+    TextView tvTiempoAnimacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,29 +35,27 @@ public class AnimacionActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_animacion);
 
-        animacionImagenes = findViewById(R.id.animacionImagenes);
+        ivAnimacion = findViewById(R.id.ivAnimacion);
+        animacion = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animacion);
+        ivAnimacion.setImageDrawable(animacion);
         btnComenzarAnimacion = findViewById(R.id.btnComenzarAnimacion);
         btnDetenerAnimacion = findViewById(R.id.btnDetenerAnimacion);
-        btnVolverAlInicioAnimacion = findViewById(R.id.btnVolverAlInicioAnimacion);
-        animacion = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animacion);
+        btnVolverAMainActivityAnimacion = findViewById(R.id.btnVolverAMainActivityAnimacion);
+        tvTiempoAnimacion = findViewById(R.id.tvTiempoAnimacion);
 
-        animacionImagenes.setImageDrawable(animacion);
         btnComenzarAnimacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 animacion.start();
+
             }
         });
+
         btnDetenerAnimacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 animacion.stop();
-            }
-        });
-        btnVolverAlInicioAnimacion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                VolverAlInicioAnimacion(null);
+
             }
         });
 
@@ -62,9 +65,4 @@ public class AnimacionActivity extends AppCompatActivity {
             return insets;
         });
     }
-    public void VolverAlInicioAnimacion(View view){
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-    }
-
 }
