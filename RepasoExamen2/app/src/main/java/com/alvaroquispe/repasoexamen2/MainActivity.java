@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,14 +23,14 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity{
     TextView tvContadorMapa;
     TextView tvContadorVector;
+    TextView tvTiempoAnimacionMain;
+
     Button btnMostrarMapa;
     Button btnMostrarActivityVector;
     Button btnMostrarActivityAnimacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        aplicarTema();
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -40,14 +41,13 @@ public class MainActivity extends AppCompatActivity{
         btnMostrarActivityAnimacion = findViewById(R.id.btnMostrarActivityAnimacion);
         tvContadorMapa= findViewById(R.id.tvContadorMapa);
         tvContadorVector = findViewById(R.id.tvContadorVector);
-
-
-
+        tvTiempoAnimacionMain = findViewById(R.id.tvTiempoAnimacionMain);
 
         //------------ Eventos --------------------
         btnMostrarActivityAnimacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 MostrarActivityAnimacion(null);
             }
         });
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
-
+        AplicarTema();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -113,21 +113,20 @@ public class MainActivity extends AppCompatActivity{
 
         if (id==R.id.preferencias){
             MostrarPreferencias(null);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void aplicarTema() {
+    private void AplicarTema() {
         SharedPreferences obtenerPreferencias = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean modoNoche = obtenerPreferencias.getBoolean("modo_noche", false);
+        Boolean modoNoche = obtenerPreferencias.getBoolean("modo_noche", true);
         if (modoNoche) {
-            this.setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight); // Aplica el tema de noche
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
-            this.setTheme(androidx.appcompat.R.style.Theme_AppCompat_Light); // Aplica el tema claro
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
-
-
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);

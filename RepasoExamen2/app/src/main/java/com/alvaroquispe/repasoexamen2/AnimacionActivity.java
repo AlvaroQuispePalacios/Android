@@ -47,7 +47,6 @@ public class AnimacionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 animacion.start();
-
             }
         });
 
@@ -56,6 +55,13 @@ public class AnimacionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 animacion.stop();
 
+            }
+        });
+
+        btnVolverAMainActivityAnimacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
