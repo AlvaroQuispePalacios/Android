@@ -31,6 +31,15 @@ public class AsteroidsView extends View {
     private int numAsteroids = 5; // Número inicial d'asteroides
     private int numFragments = 3; // Fragments en que es divideix
 
+
+    // //// THREAD I TEMPS //////
+    // Thread encarregat de processar el joc
+    private GameThread thread = new GameThread();
+    // Cada quan volem processar canvis (ms)
+    private static int ANIM_INTERVAL = 50;
+    // Quan es va realitzar el darrer procés
+    private long prevUpdate = 0;
+
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Drawable drawableShip, drawableAsteroid, drawableMissile;
@@ -110,17 +119,56 @@ public class AsteroidsView extends View {
                 asteroid.setCenY((int)(Math.random() * height));
             }while(asteroid.distance(ship) < (width+height)/5);
         }
+        prevUpdate = System.currentTimeMillis();
+        thread.start();
     }
 
     @Override protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         if (ship != null) {
             ship.drawGraphic(canvas);
         }
-
         for (AsteroidsGraphic asteroid: asteroids) {
             asteroid.drawGraphic(canvas);
         }
     }
+
+    class GameThread extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                updateView();
+            }
+        }
+    }
+
+    protected void updateView(){
+        long now = System.currentTimeMillis();
+        // No fer res fins a final del període
+        if (prevUpdate + ANIM_INTERVAL > now){
+            return;
+        }
+        // Per a una execució en temps real calculam retard
+        double delay = (now - prevUpdate) / ANIM_INTERVAL;
+        prevUpdate = now;
+        // Actualitzam velocitat i direcció de la nau a partir de
+        // ship.rotAngle, ship.rotSpeed, and accelShip
+        ship.setRotAngle((int) (ship.getRotAngle() + ship.getRotSpeed()
+                * delay));
+        double nIncX = ship.getIncX() + accelShip *
+                Math.cos(Math.toRadians(ship.getRotAngle())) * delay;
+        double nIncY = ship.getIncY() + accelShip *
+                Math.sin(Math.toRadians(ship.getRotAngle())) * delay;
+        // Actualitzam si el mòdul de la velocitat no excedeix el màxim
+        if (Math.hypot(nIncX,nIncY) <= SHIP_MAX_SPEED){
+            ship.setIncX(nIncX);
+            ship.setIncY(nIncY);
+        }
+        // Actualitzam posicions X i Y
+        ship.updatePos(delay);
+        for (AsteroidsGraphic asteroid : asteroids) {
+            asteroid.updatePos(delay);
+        }
+    }
 }
+
