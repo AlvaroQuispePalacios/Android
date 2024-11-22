@@ -51,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
         tarea.execute(nombreArchivo);
     }
 
-    class Tarea extends AsyncTask<String, Integer, String>{
+    class Tarea extends AsyncTask<String, Integer, Integer>{
         private ProgressDialog barraDeProgreso;
+        private boolean tareaCancelada = false;
+        private String nombreArchivo;
         @Override
         protected void onPreExecute(){
             barraDeProgreso = new ProgressDialog(MainActivity.this);
@@ -65,26 +67,48 @@ public class MainActivity extends AppCompatActivity {
                     Tarea.this.cancel(true);
                 }
             });
+            barraDeProgreso.show();
         }
 
         @Override protected void onCancelled() {
-            etNombreFichero.append("La copia de seguridad ha sido cancelada");
+            tvMensaje.append("La copia de seguridad ha sido cancelada");
         }
 
-        @Override protected Integer doInBackground(String... n) {
-            Random numero = new Random();
-            return 1;
+        @Override protected Integer doInBackground(String... params) {
+            nombreArchivo = params[0];
+            Random random = new Random();
+            int tamañoFichero = random.nextInt(500) + 100;
+
+            for (int i = 1; i <= 100; i++) {
+                if (isCancelled()) {
+                    return null;
+                }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+                publishProgress(i);
+            }
+            return tamañoFichero;
         }
 
         @Override protected void onProgressUpdate(Integer... perc) {
+            super.onProgressUpdate(perc);
             barraDeProgreso.setProgress(perc[0]);
         }
 
-        @Override protected void onPostExecute(String res) {
+        @Override protected void onPostExecute(Integer tamañoFichero) {
+            super.onPostExecute(tamañoFichero);
             barraDeProgreso.dismiss();
-            tvMensaje.append(res);
+            if (!tareaCancelada) {
+                tvMensaje.setText("Copia de seguridad completada.\n");
+                tvMensaje.append("Archivo: " + nombreArchivo + "\n");
+                tvMensaje.append("Tamaño del fichero: " + tamañoFichero + " MB\n");
+            }
 
         }
     }
-    }
+
 }
