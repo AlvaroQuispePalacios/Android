@@ -11,6 +11,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class AsteroidsView extends View {
     private AsteroidsGraphic ship; // Gràfic de la nau
     private int angleShip; // Angle de gir de la nau
     private float accelShip; // Augment de velocitat
-    private static final double SHIP_MAX_SPEED = 50;
+    private static final double SHIP_MAX_SPEED = 100;
     // Increment estàndar de gir i acceleració
     private static final int STEPSIZE_ROT_SHIP = 5;
     private static final float STEPSIZE_ACCEL_SHIP = 0.5f;
@@ -123,7 +124,7 @@ public class AsteroidsView extends View {
         thread.start();
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (ship != null) {
             ship.drawGraphic(canvas);
@@ -142,7 +143,7 @@ public class AsteroidsView extends View {
         }
     }
 
-    protected void updateView(){
+    protected synchronized void updateView(){
         long now = System.currentTimeMillis();
         // No fer res fins a final del període
         if (prevUpdate + ANIM_INTERVAL > now){
@@ -169,6 +170,59 @@ public class AsteroidsView extends View {
         for (AsteroidsGraphic asteroid : asteroids) {
             asteroid.updatePos(delay);
         }
+    }
+
+
+    // ------------ EJERCICIO 6.9 --------------
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        super.onKeyDown(keyCode, event);
+        // Processam la pulsació
+        boolean processed = true;
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+                accelShip = +STEPSIZE_ACCEL_SHIP;
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                ship.setRotSpeed(-STEPSIZE_ROT_SHIP);
+                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                ship.setRotSpeed(STEPSIZE_ROT_SHIP);
+                break;
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+            case KeyEvent.KEYCODE_ENTER:
+                //fireMissile();
+                break;
+            default:
+                // Si estem aquí, no hi ha pulsació que ens interessi
+                processed = false;
+                break;
+        }
+        return processed;
+    }
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        super.onKeyUp(keyCode, event);
+        // Processam la pulsació
+        boolean processed = true;
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+                accelShip = +0;
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                ship.setRotSpeed(-0);
+                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                ship.setRotSpeed(0);
+                break;
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+            case KeyEvent.KEYCODE_ENTER:
+                //fireMissile();
+                break;
+            default:
+                // Si estem aquí, no hi ha pulsació que ens interessi
+                processed = false;
+                break;
+        }
+        return processed;
     }
 }
 
