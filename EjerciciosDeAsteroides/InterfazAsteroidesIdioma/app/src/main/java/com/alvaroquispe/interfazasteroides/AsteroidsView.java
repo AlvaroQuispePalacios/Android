@@ -9,15 +9,20 @@ import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AsteroidsView extends View {
+public class AsteroidsView extends View implements SensorEventListener {
     /////// SPACESHIP //////
     private AsteroidsGraphic ship; // Gràfic de la nau
     private int angleShip; // Angle de gir de la nau
@@ -40,6 +45,13 @@ public class AsteroidsView extends View {
     private static int ANIM_INTERVAL = 50;
     // Quan es va realitzar el darrer procés
     private long prevUpdate = 0;
+    private float mX = 0;
+    private float mY = 0;
+    private boolean fire;
+
+    // ---------   Sensores ---------
+    private float initValue;
+    private boolean initValueValid = false;
 
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -50,12 +62,12 @@ public class AsteroidsView extends View {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
             Path pathShip = new Path();
-            pathShip.moveTo(0,0);
+            pathShip.moveTo(0, 0);
             pathShip.lineTo(1, 0.5f);
             pathShip.lineTo(0, 1);
             pathShip.close();
 
-            ShapeDrawable dShip = new ShapeDrawable(new PathShape(pathShip,1,1));
+            ShapeDrawable dShip = new ShapeDrawable(new PathShape(pathShip, 1, 1));
             dShip.getPaint().setColor(Color.WHITE);
             dShip.getPaint().setStyle(Paint.Style.STROKE);
             dShip.getPaint().setStrokeWidth(2);
@@ -103,9 +115,18 @@ public class AsteroidsView extends View {
             asteroid.setRotSpeed((int) (Math.random() * 8 - 4));
             asteroids.add(asteroid);
         }
+
+        //  Sensores
+        SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        if (!sensorList.isEmpty()) {
+            Sensor accelerometerSensor = sensorList.get(0);
+            mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
+        }
     }
 
-    @Override protected void onSizeChanged(int width, int height, int prevWidth, int prevHeight) {
+    @Override
+    protected void onSizeChanged(int width, int height, int prevWidth, int prevHeight) {
         super.onSizeChanged(width, height, prevWidth, prevHeight);
         // Posiciona la nave en el centro de la pantalla
         if (ship != null) {
@@ -114,22 +135,23 @@ public class AsteroidsView extends View {
         }
 
         // Un cop coneixem el nostre ample i alt.
-        for (AsteroidsGraphic asteroid: asteroids) {
-            do{
-                asteroid.setCenX((int)(Math.random() * width));
-                asteroid.setCenY((int)(Math.random() * height));
-            }while(asteroid.distance(ship) < (width+height)/5);
+        for (AsteroidsGraphic asteroid : asteroids) {
+            do {
+                asteroid.setCenX((int) (Math.random() * width));
+                asteroid.setCenY((int) (Math.random() * height));
+            } while (asteroid.distance(ship) < (width + height) / 5);
         }
         prevUpdate = System.currentTimeMillis();
         thread.start();
     }
 
-    @Override protected synchronized void onDraw(Canvas canvas) {
+    @Override
+    protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (ship != null) {
             ship.drawGraphic(canvas);
         }
-        for (AsteroidsGraphic asteroid: asteroids) {
+        for (AsteroidsGraphic asteroid : asteroids) {
             asteroid.drawGraphic(canvas);
         }
     }
@@ -143,10 +165,10 @@ public class AsteroidsView extends View {
         }
     }
 
-    protected synchronized void updateView(){
+    protected synchronized void updateView() {
         long now = System.currentTimeMillis();
         // No fer res fins a final del període
-        if (prevUpdate + ANIM_INTERVAL > now){
+        if (prevUpdate + ANIM_INTERVAL > now) {
             return;
         }
         // Per a una execució en temps real calculam retard
@@ -161,7 +183,7 @@ public class AsteroidsView extends View {
         double nIncY = ship.getIncY() + accelShip *
                 Math.sin(Math.toRadians(ship.getRotAngle())) * delay;
         // Actualitzam si el mòdul de la velocitat no excedeix el màxim
-        if (Math.hypot(nIncX,nIncY) <= SHIP_MAX_SPEED){
+        if (Math.hypot(nIncX, nIncY) <= SHIP_MAX_SPEED) {
             ship.setIncX(nIncX);
             ship.setIncY(nIncY);
         }
@@ -199,6 +221,7 @@ public class AsteroidsView extends View {
         }
         return processed;
     }
+
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         super.onKeyUp(keyCode, event);
         // Processam la pulsació
@@ -224,5 +247,55 @@ public class AsteroidsView extends View {
         }
         return processed;
     }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        float x = event.getX();
+        float y = event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                fire = true;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float dx = Math.abs(x - mX);
+                float dy = Math.abs(y - mY);
+                if (dy < 6 && dx > 6) {
+                    ship.setRotSpeed(Math.round((x - mX) / 2));
+                    fire = false;
+                } else if (dx < 6 && dy > 6) {
+                    accelShip = Math.round((mY - y) / 25);
+                    fire = false;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                ship.setRotSpeed(0);
+                accelShip = 0;
+                if (fire) {
+                    //fireMissile();
+                }
+                break;
+        }
+        mX = x;
+        mY = y;
+        return true;
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        float value = sensorEvent.values[1];
+        if (!initValueValid) {
+            initValue = value;
+            initValueValid = true;
+        }
+        ship.setRotSpeed((int) (value - initValue) / 3);
+        accelShip = sensorEvent.values[2];
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
 }
 
