@@ -32,6 +32,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public boolean onTouch(View view, MotionEvent motionEvent) {
         TextView sortida = (TextView) findViewById(R.id.TextViewSortida);
         sortida.append(motionEvent.toString()+"\n" );
-        return false;
+        String accions[] = { "ACTION_DOWN", "ACTION_UP", "ACTION_MOVE",
+                "ACTION_CANCEL","ACTION_OUTSIDE", "ACTION_POINTER_DOWN",
+                "ACTION_POINTER_UP" };
+        int accio = motionEvent.getAction();
+        int codiAccio = accio & MotionEvent.ACTION_MASK;
+        int iPunter = (accio & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+        sortida.append(accions[codiAccio]);
+        for (int i = 0; i < motionEvent.getPointerCount(); i++) {
+            sortida.append(" punter:" + motionEvent.getPointerId(i) +
+                    " x:" + motionEvent.getX(i) + " y:" +
+                    motionEvent.getY(i));
+        }
+        sortida.append("\n");
+        return true;
     }
 }
