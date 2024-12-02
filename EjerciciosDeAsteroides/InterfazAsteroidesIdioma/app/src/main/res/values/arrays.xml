@@ -20,4 +20,16 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <string-array name="tipoControles">
+        <item>Teclado</item>
+        <item>Tactil</item>
+        <item>Sensor</item>
+    </string-array>
+
+    <string-array name="tipoControlesValores">
+        <item>0</item>
+        <item>1</item>
+        <item>2r</item>
+    </string-array>
 </resources>

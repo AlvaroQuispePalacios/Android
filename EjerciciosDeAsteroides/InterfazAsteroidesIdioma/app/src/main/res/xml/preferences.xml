@@ -22,6 +22,14 @@
         android:inputType="number"
         android:defaultValue="3"/>
 
+    <ListPreference
+        android:key="controles"
+        android:title="Tipo de control"
+        android:summary="Escoger como se manejara la mave"
+        android:entries="@array/tipoControles"
+        android:entryValues="@array/tipusGraficsValors"
+        android:defaultValue="1"/>
+
     <PreferenceCategory android:title="Modo multijugador">
         <CheckBoxPreference
             android:key="Activar multijugador"
@@ -44,5 +52,7 @@
             />
 
     </PreferenceCategory>
+
+
 
 </PreferenceScreen>

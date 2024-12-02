@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
+import android.graphics.drawable.shapes.RectShape;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -27,7 +28,7 @@ public class AsteroidsView extends View implements SensorEventListener {
     private AsteroidsGraphic ship; // Gràfic de la nau
     private int angleShip; // Angle de gir de la nau
     private float accelShip; // Augment de velocitat
-    private static final double SHIP_MAX_SPEED = 100;
+    private static final double SHIP_MAX_SPEED = 10;
     // Increment estàndar de gir i acceleració
     private static final int STEPSIZE_ROT_SHIP = 5;
     private static final float STEPSIZE_ACCEL_SHIP = 0.5f;
@@ -53,13 +54,31 @@ public class AsteroidsView extends View implements SensorEventListener {
     private float initValue;
     private boolean initValueValid = false;
 
+
+    // //// MISIL //////
+    private AsteroidsGraphic missile;
+//    private List<AsteroidsGraphic> missiles;
+
+    private static int MISSILE_SPEED = 12;
+    private boolean missileActive = false;
+
+    private int missileLifetime;
+//    private List<Double> missileLifetimes;
+
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Drawable drawableShip, drawableAsteroid, drawableMissile;
-
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         if (pref.getString("grafics", "1").equals("0")) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
+            //
+            ShapeDrawable dMissile = new ShapeDrawable(new RectShape());
+            dMissile.getPaint().setColor(Color.WHITE);
+            dMissile.getPaint().setStyle(Paint.Style.STROKE);
+            dMissile.setIntrinsicWidth(15);
+            dMissile.setIntrinsicHeight(3);
+            drawableMissile = dMissile;
 
             Path pathShip = new Path();
             pathShip.moveTo(0, 0);
@@ -74,7 +93,6 @@ public class AsteroidsView extends View implements SensorEventListener {
             dShip.setIntrinsicWidth(20);
             dShip.setIntrinsicHeight(20);
             drawableShip = dShip;
-
 
             Path pathAsteroid = new Path();
             pathAsteroid.moveTo((float) 0.3, (float) 0.0);
@@ -102,6 +120,7 @@ public class AsteroidsView extends View implements SensorEventListener {
             setLayerType(View.LAYER_TYPE_HARDWARE, null);
             drawableAsteroid = context.getResources().getDrawable(R.drawable.asteroide1);
             drawableShip = context.getResources().getDrawable(R.drawable.nave);
+            drawableMissile = context.getResources().getDrawable(R.drawable.misil1);
         }
 
         ship = new AsteroidsGraphic(this, drawableShip);
@@ -115,6 +134,14 @@ public class AsteroidsView extends View implements SensorEventListener {
             asteroid.setRotSpeed((int) (Math.random() * 8 - 4));
             asteroids.add(asteroid);
         }
+
+        missile = new AsteroidsGraphic(this, drawableMissile);
+//        missiles = new ArrayList<AsteroidsGraphic>();
+//        for (int i = 0; i < numAsteroids; i++) {
+//            AsteroidsGraphic missile = new AsteroidsGraphic(this, drawableMissile);
+//            missiles.add(missile);
+//        }
+
 
         //  Sensores
         SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -151,6 +178,17 @@ public class AsteroidsView extends View implements SensorEventListener {
         if (ship != null) {
             ship.drawGraphic(canvas);
         }
+
+        if(missileActive){
+            missile.drawGraphic(canvas);
+        }
+
+//        if (!missiles.isEmpty()) {
+//            for (AsteroidsGraphic missile : missiles) {
+//                missile.drawGraphic(canvas);
+//            }
+//        }
+
         for (AsteroidsGraphic asteroid : asteroids) {
             asteroid.drawGraphic(canvas);
         }
@@ -171,27 +209,58 @@ public class AsteroidsView extends View implements SensorEventListener {
         if (prevUpdate + ANIM_INTERVAL > now) {
             return;
         }
+
         // Per a una execució en temps real calculam retard
         double delay = (now - prevUpdate) / ANIM_INTERVAL;
         prevUpdate = now;
+
         // Actualitzam velocitat i direcció de la nau a partir de
         // ship.rotAngle, ship.rotSpeed, and accelShip
         ship.setRotAngle((int) (ship.getRotAngle() + ship.getRotSpeed()
                 * delay));
-        double nIncX = ship.getIncX() + accelShip *
-                Math.cos(Math.toRadians(ship.getRotAngle())) * delay;
-        double nIncY = ship.getIncY() + accelShip *
-                Math.sin(Math.toRadians(ship.getRotAngle())) * delay;
+        double nIncX = ship.getIncX() + accelShip * Math.cos(Math.toRadians(ship.getRotAngle())) * delay;
+        double nIncY = ship.getIncY() + accelShip * Math.sin(Math.toRadians(ship.getRotAngle())) * delay;
+
         // Actualitzam si el mòdul de la velocitat no excedeix el màxim
         if (Math.hypot(nIncX, nIncY) <= SHIP_MAX_SPEED) {
             ship.setIncX(nIncX);
             ship.setIncY(nIncY);
         }
+
         // Actualitzam posicions X i Y
         ship.updatePos(delay);
         for (AsteroidsGraphic asteroid : asteroids) {
             asteroid.updatePos(delay);
         }
+
+        if (missileActive) {
+            missile.updatePos(delay);
+            missileLifetime-=delay;
+            if (missileLifetime < 0) {
+                missileActive = false;
+            } else {
+                for (int i = 0; i < asteroids.size(); i++)
+                    if (missile.checkCollision(asteroids.get(i))) {
+                        destroyAsteroid(i);
+                        break;
+                    }
+            }
+        }
+    }
+
+    private void destroyAsteroid(int i) {
+        asteroids.remove(i);
+        missileActive = false;
+    }
+
+    private void fireMissile() {
+        missile.setCenX(ship.getCenX());
+        missile.setCenY(ship.getCenY());
+        missile.setRotAngle(ship.getRotAngle());
+        missile.setIncX(Math.cos(Math.toRadians(missile.getRotAngle())) * MISSILE_SPEED);
+        missile.setIncY(Math.sin(Math.toRadians(missile.getRotAngle())) * MISSILE_SPEED);
+        missileLifetime = (int) Math.min(this.getWidth() / Math.abs(missile.getIncX()), this.getHeight() / Math.abs(missile.getIncY())) - 2;
+        missileActive = true;
     }
 
 
@@ -212,7 +281,7 @@ public class AsteroidsView extends View implements SensorEventListener {
                 break;
             case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_ENTER:
-                //fireMissile();
+                fireMissile();
                 break;
             default:
                 // Si estem aquí, no hi ha pulsació que ens interessi
@@ -238,7 +307,7 @@ public class AsteroidsView extends View implements SensorEventListener {
                 break;
             case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_ENTER:
-                //fireMissile();
+                fireMissile();
                 break;
             default:
                 // Si estem aquí, no hi ha pulsació que ens interessi
@@ -271,7 +340,7 @@ public class AsteroidsView extends View implements SensorEventListener {
                 ship.setRotSpeed(0);
                 accelShip = 0;
                 if (fire) {
-                    //fireMissile();
+                    fireMissile();
                 }
                 break;
         }
@@ -289,7 +358,7 @@ public class AsteroidsView extends View implements SensorEventListener {
             initValueValid = true;
         }
         ship.setRotSpeed((int) (value - initValue) / 3);
-        accelShip = sensorEvent.values[2];
+        accelShip = sensorEvent.values[2] / 2;
     }
 
     @Override
