@@ -1,7 +1,11 @@
 package com.alvaroquispe.interfazasteroides;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +28,15 @@ public class MainActivity extends AppCompatActivity {
     Button btnScore;
     Button btnSobre;
     Button btnJugar;
+    MediaPlayer mp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+//        mp= MediaPlayer.create(this, R.raw.audio);
+//        mp.start();
 
         btnJugar = findViewById(R.id.btnJugar);
         btnSobre = findViewById(R.id.btnSobre);
@@ -77,6 +85,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean musica = pref.getBoolean("musica", true);
+        mp = MediaPlayer.create(this, R.raw.audio);
+        if(musica){
+            mp.start();
+        }else{
+            mp.stop();
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        mp.stop();
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -119,5 +147,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // -------------------------------------------------------------
+
+
 
 }

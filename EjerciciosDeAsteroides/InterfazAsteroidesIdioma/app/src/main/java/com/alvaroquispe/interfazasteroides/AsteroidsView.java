@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AsteroidsView extends View implements SensorEventListener {
+
     /////// SPACESHIP //////
     private AsteroidsGraphic ship; // Gràfic de la nau
     private int angleShip; // Angle de gir de la nau
@@ -53,7 +54,7 @@ public class AsteroidsView extends View implements SensorEventListener {
     // ---------   Sensores ---------
     private float initValue;
     private boolean initValueValid = false;
-
+    String controlElegido;
 
     // //// MISIL //////
     private AsteroidsGraphic missile;
@@ -68,7 +69,10 @@ public class AsteroidsView extends View implements SensorEventListener {
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Drawable drawableShip, drawableAsteroid, drawableMissile;
+        // Preferencias
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        controlElegido = pref.getString("controles", "?");
+
         if (pref.getString("grafics", "1").equals("0")) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
@@ -150,7 +154,9 @@ public class AsteroidsView extends View implements SensorEventListener {
             Sensor accelerometerSensor = sensorList.get(0);
             mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
         }
+
     }
+
 
     @Override
     protected void onSizeChanged(int width, int height, int prevWidth, int prevHeight) {
@@ -194,11 +200,40 @@ public class AsteroidsView extends View implements SensorEventListener {
         }
     }
 
+    public GameThread getThread() {
+        return thread;
+    }
     class GameThread extends Thread {
+        private boolean paused, running;
+
+        public synchronized void pause(){
+            paused = true;
+        }
+
+        public synchronized void unpause(){
+            paused = false;
+            notify();
+        }
+
+        public void halt(){
+            running = false;
+            if(paused) unpause();
+        }
+
         @Override
         public void run() {
+            running = true;
             while (true) {
                 updateView();
+                synchronized (this){
+                    while (paused){
+                        try{
+                            wait();
+                        }catch (Exception e){
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -266,6 +301,9 @@ public class AsteroidsView extends View implements SensorEventListener {
 
     // ------------ EJERCICIO 6.9 --------------
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(controlElegido.equals("teclado")){
+//
+//        }
         super.onKeyDown(keyCode, event);
         // Processam la pulsació
         boolean processed = true;
@@ -318,6 +356,9 @@ public class AsteroidsView extends View implements SensorEventListener {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
+        if(controlElegido.equals("tactil")){
+
+        }
         super.onTouchEvent(event);
         float x = event.getX();
         float y = event.getY();
@@ -352,13 +393,15 @@ public class AsteroidsView extends View implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        float value = sensorEvent.values[1];
-        if (!initValueValid) {
-            initValue = value;
-            initValueValid = true;
+        if(controlElegido.equals("sensor")){
+            float value = sensorEvent.values[1];
+            if (!initValueValid) {
+                initValue = value;
+                initValueValid = true;
+            }
+            ship.setRotSpeed((int) (value - initValue) / 3);
+            accelShip = sensorEvent.values[2] / 2;
         }
-        ship.setRotSpeed((int) (value - initValue) / 3);
-        accelShip = sensorEvent.values[2] / 2;
     }
 
     @Override
