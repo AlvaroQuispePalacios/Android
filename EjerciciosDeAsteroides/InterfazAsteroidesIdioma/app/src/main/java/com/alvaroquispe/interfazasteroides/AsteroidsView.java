@@ -58,17 +58,19 @@ public class AsteroidsView extends View implements SensorEventListener {
 
     // //// MISIL //////
     private AsteroidsGraphic missile;
-//    private List<AsteroidsGraphic> missiles;
+    private List<AsteroidsGraphic> missiles = new ArrayList<>();
 
     private static int MISSILE_SPEED = 12;
     private boolean missileActive = false;
 
     private int missileLifetime;
-//    private List<Double> missileLifetimes;
+    private List<Double> missileLifetimes = new ArrayList<>();
+
+    Drawable drawableMissile;
 
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Drawable drawableShip, drawableAsteroid, drawableMissile;
+        Drawable drawableShip, drawableAsteroid;
         // Preferencias
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         controlElegido = pref.getString("controles", "?");
@@ -127,8 +129,6 @@ public class AsteroidsView extends View implements SensorEventListener {
             drawableMissile = context.getResources().getDrawable(R.drawable.misil1);
         }
 
-        ship = new AsteroidsGraphic(this, drawableShip);
-
         asteroids = new ArrayList<AsteroidsGraphic>();
         for (int i = 0; i < numAsteroids; i++) {
             AsteroidsGraphic asteroid = new AsteroidsGraphic(this, drawableAsteroid);
@@ -139,12 +139,8 @@ public class AsteroidsView extends View implements SensorEventListener {
             asteroids.add(asteroid);
         }
 
+        ship = new AsteroidsGraphic(this, drawableShip);
         missile = new AsteroidsGraphic(this, drawableMissile);
-//        missiles = new ArrayList<AsteroidsGraphic>();
-//        for (int i = 0; i < numAsteroids; i++) {
-//            AsteroidsGraphic missile = new AsteroidsGraphic(this, drawableMissile);
-//            missiles.add(missile);
-//        }
 
 
         //  Sensores
@@ -181,28 +177,28 @@ public class AsteroidsView extends View implements SensorEventListener {
     @Override
     protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (ship != null) {
-            ship.drawGraphic(canvas);
-        }
+//        if (ship != null) {
+//            ship.drawGraphic(canvas);
+//        }
 
-        if(missileActive){
-            missile.drawGraphic(canvas);
-        }
-
-//        if (!missiles.isEmpty()) {
-//            for (AsteroidsGraphic missile : missiles) {
-//                missile.drawGraphic(canvas);
-//            }
+//        if(missileActive){
+//            missile.drawGraphic(canvas);
 //        }
 
         for (AsteroidsGraphic asteroid : asteroids) {
             asteroid.drawGraphic(canvas);
+        }
+        ship.drawGraphic(canvas);
+
+        for(AsteroidsGraphic missile: missiles){
+            missile.drawGraphic(canvas);
         }
     }
 
     public GameThread getThread() {
         return thread;
     }
+
     class GameThread extends Thread {
         private boolean paused, running;
 
@@ -268,34 +264,57 @@ public class AsteroidsView extends View implements SensorEventListener {
             asteroid.updatePos(delay);
         }
 
-        if (missileActive) {
+//        if (missileActive) {
+//            missile.updatePos(delay);
+//            missileLifetime-=delay;
+//            if (missileLifetime < 0) {
+//                missileActive = false;
+//            } else {
+//                for (int i = 0; i < asteroids.size(); i++)
+//                    if (missile.checkCollision(asteroids.get(i))) {
+//                        destroyAsteroid(i);
+//                        break;
+//                    }
+//            }
+//        }
+        for (int i = 0; i < missiles.size(); i++) {
+            AsteroidsGraphic missile = missiles.get(i);
             missile.updatePos(delay);
-            missileLifetime-=delay;
-            if (missileLifetime < 0) {
-                missileActive = false;
+            missileLifetimes.set(i, missileLifetimes.get(i) - delay);
+
+            if (missileLifetimes.get(i) < 0) {
+                missiles.remove(i);
+                missileLifetimes.remove(i);
+                i--;
             } else {
-                for (int i = 0; i < asteroids.size(); i++)
-                    if (missile.checkCollision(asteroids.get(i))) {
-                        destroyAsteroid(i);
+                for (int j = 0; j < asteroids.size(); j++) {
+                    if (missile.checkCollision(asteroids.get(j))) {
+                        destroyAsteroid(j);
+                        missiles.remove(i);
+                        missileLifetimes.remove(i);
+                        i--;
                         break;
                     }
+                }
             }
         }
     }
 
     private void destroyAsteroid(int i) {
         asteroids.remove(i);
-        missileActive = false;
+//        missileActive = false;
     }
 
     private void fireMissile() {
-        missile.setCenX(ship.getCenX());
-        missile.setCenY(ship.getCenY());
-        missile.setRotAngle(ship.getRotAngle());
-        missile.setIncX(Math.cos(Math.toRadians(missile.getRotAngle())) * MISSILE_SPEED);
-        missile.setIncY(Math.sin(Math.toRadians(missile.getRotAngle())) * MISSILE_SPEED);
-        missileLifetime = (int) Math.min(this.getWidth() / Math.abs(missile.getIncX()), this.getHeight() / Math.abs(missile.getIncY())) - 2;
-        missileActive = true;
+        AsteroidsGraphic newMissile = new AsteroidsGraphic(this, drawableMissile);
+        newMissile.setCenX(ship.getCenX());
+        newMissile.setCenY(ship.getCenY());
+        newMissile.setRotAngle(ship.getRotAngle());
+        newMissile.setIncX(Math.cos(Math.toRadians(newMissile.getRotAngle())) * MISSILE_SPEED);
+        newMissile.setIncY(Math.sin(Math.toRadians(newMissile.getRotAngle())) * MISSILE_SPEED);
+
+        missiles.add(newMissile);  // Afegim el nou míssil a la llista
+        missileLifetimes.add((double) Math.min(this.getWidth() / Math.abs(newMissile.getIncX()), this.getHeight() / Math.abs(newMissile.getIncY())) - 2);  // Afegim el temps de vida
     }
 
 
