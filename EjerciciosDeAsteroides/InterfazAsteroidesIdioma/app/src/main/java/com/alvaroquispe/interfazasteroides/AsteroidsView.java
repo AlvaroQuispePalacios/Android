@@ -143,18 +143,32 @@ public class AsteroidsView extends View implements SensorEventListener {
         ship = new AsteroidsGraphic(this, drawableShip);
         missile = new AsteroidsGraphic(this, drawableMissile);
 
-
         //  Sensores
-        SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+//        SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+//        List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+//        if (!sensorList.isEmpty()) {
+//            Sensor accelerometerSensor = sensorList.get(0);
+//            mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
+//        }
+
+        if (controlElegido.equals("2")) {
+            activateSensors();
+        }
+    }
+
+    public void activateSensors() {
+        SensorManager mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
         if (!sensorList.isEmpty()) {
             Sensor accelerometerSensor = sensorList.get(0);
             mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
         }
-
     }
 
-
+    public void deactivateSensors() {
+        SensorManager mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.unregisterListener(this);
+    }
 
     @Override
     protected void onSizeChanged(int width, int height, int prevWidth, int prevHeight) {
@@ -192,7 +206,7 @@ public class AsteroidsView extends View implements SensorEventListener {
         }
         ship.drawGraphic(canvas);
 
-        for(AsteroidsGraphic missile: missiles){
+        for (AsteroidsGraphic missile : missiles) {
             missile.drawGraphic(canvas);
         }
     }
@@ -204,18 +218,18 @@ public class AsteroidsView extends View implements SensorEventListener {
     class GameThread extends Thread {
         private boolean paused, running;
 
-        public synchronized void pause(){
+        public synchronized void pause() {
             paused = true;
         }
 
-        public synchronized void unpause(){
+        public synchronized void unpause() {
             paused = false;
             notify();
         }
 
-        public void halt(){
+        public void halt() {
             running = false;
-            if(paused) unpause();
+            if (paused) unpause();
         }
 
         @Override
@@ -223,11 +237,11 @@ public class AsteroidsView extends View implements SensorEventListener {
             running = true;
             while (true) {
                 updateView();
-                synchronized (this){
-                    while (paused){
-                        try{
+                synchronized (this) {
+                    while (paused) {
+                        try {
                             wait();
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                     }
@@ -322,107 +336,111 @@ public class AsteroidsView extends View implements SensorEventListener {
 
     // ------------ EJERCICIO 6.9 --------------
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if(controlElegido.equals("teclado")){
-//
-//        }
-        super.onKeyDown(keyCode, event);
-        // Processam la pulsació
-        boolean processed = true;
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_UP:
-                accelShip = +STEPSIZE_ACCEL_SHIP;
-                break;
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                ship.setRotSpeed(-STEPSIZE_ROT_SHIP);
-                break;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                ship.setRotSpeed(STEPSIZE_ROT_SHIP);
-                break;
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-            case KeyEvent.KEYCODE_ENTER:
-                fireMissile();
-                break;
-            default:
-                // Si estem aquí, no hi ha pulsació que ens interessi
-                processed = false;
-                break;
+        if(controlElegido.equals("0")){
+            super.onKeyDown(keyCode, event);
+            // Processam la pulsació
+            boolean processed = true;
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    accelShip = +STEPSIZE_ACCEL_SHIP;
+                    break;
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    ship.setRotSpeed(-STEPSIZE_ROT_SHIP);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    ship.setRotSpeed(STEPSIZE_ROT_SHIP);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                case KeyEvent.KEYCODE_ENTER:
+                    fireMissile();
+                    break;
+                default:
+                    // Si estem aquí, no hi ha pulsació que ens interessi
+                    processed = false;
+                    break;
+            }
+            return processed;
         }
-        return processed;
+        return true;
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        super.onKeyUp(keyCode, event);
-        // Processam la pulsació
-        boolean processed = true;
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_UP:
-                accelShip = +0;
-                break;
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                ship.setRotSpeed(-0);
-                break;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                ship.setRotSpeed(0);
-                break;
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-            case KeyEvent.KEYCODE_ENTER:
-                fireMissile();
-                break;
-            default:
-                // Si estem aquí, no hi ha pulsació que ens interessi
-                processed = false;
-                break;
+        if(controlElegido.equals("0")){
+            super.onKeyUp(keyCode, event);
+            // Processam la pulsació
+            boolean processed = true;
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    accelShip = +0;
+                    break;
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    ship.setRotSpeed(-0);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    ship.setRotSpeed(0);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                case KeyEvent.KEYCODE_ENTER:
+                    fireMissile();
+                    break;
+                default:
+                    // Si estem aquí, no hi ha pulsació que ens interessi
+                    processed = false;
+                    break;
+            }
+            return processed;
         }
-        return processed;
+        return true;
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        if(controlElegido.equals("tactil")){
+        if (controlElegido.equals("1")) {
+            super.onTouchEvent(event);
+            float x = event.getX();
+            float y = event.getY();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    fire = true;
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float dx = Math.abs(x - mX);
+                    float dy = Math.abs(y - mY);
+                    if (dy < 6 && dx > 6) {
+                        ship.setRotSpeed(Math.round((x - mX) / 2));
+                        fire = false;
+                    } else if (dx < 6 && dy > 6) {
+                        accelShip = Math.round((mY - y) / 25);
+                        fire = false;
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    ship.setRotSpeed(0);
+                    accelShip = 0;
+                    if (fire) {
+                        fireMissile();
+                    }
+                    break;
+            }
+            mX = x;
+            mY = y;
+            return true;
+        }
+        return false;
 
-        }
-        super.onTouchEvent(event);
-        float x = event.getX();
-        float y = event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                fire = true;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float dx = Math.abs(x - mX);
-                float dy = Math.abs(y - mY);
-                if (dy < 6 && dx > 6) {
-                    ship.setRotSpeed(Math.round((x - mX) / 2));
-                    fire = false;
-                } else if (dx < 6 && dy > 6) {
-                    accelShip = Math.round((mY - y) / 25);
-                    fire = false;
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                ship.setRotSpeed(0);
-                accelShip = 0;
-                if (fire) {
-                    fireMissile();
-                }
-                break;
-        }
-        mX = x;
-        mY = y;
-        return true;
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if(controlElegido.equals("sensor")){
-            float value = sensorEvent.values[1];
-            if (!initValueValid) {
-                initValue = value;
-                initValueValid = true;
-            }
-            ship.setRotSpeed((int) (value - initValue) / 3);
-            accelShip = sensorEvent.values[2] / 2;
+
+        float value = sensorEvent.values[1];
+        if (!initValueValid) {
+            initValue = value;
+            initValueValid = true;
         }
+        ship.setRotSpeed((int) (value - initValue) / 3);
+        accelShip = sensorEvent.values[2] / 2;
+
     }
 
     @Override

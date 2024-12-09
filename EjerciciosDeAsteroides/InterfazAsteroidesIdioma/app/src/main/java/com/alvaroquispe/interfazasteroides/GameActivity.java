@@ -27,6 +27,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override protected void onDestroy() {
         gameView.getThread().halt();
+        gameView.deactivateSensors();
         super.onDestroy();
     }
 }

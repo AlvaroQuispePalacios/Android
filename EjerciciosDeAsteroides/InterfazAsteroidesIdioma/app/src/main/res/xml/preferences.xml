@@ -29,7 +29,7 @@
         android:title="Tipo de control"
         android:summary="Escoger como se manejara la mave"
         android:entries="@array/tipoControles"
-        android:entryValues="@array/tipusGraficsValors"
+        android:entryValues="@array/tipoConexionValores"
         android:defaultValue="1"/>
 
     <PreferenceCategory android:title="Modo multijugador">
