@@ -31,7 +31,7 @@
         >
 
         <Button
-            android:id="@+id/jugar"
+            android:id="@+id/btnJugar"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -42,7 +42,7 @@
             tools:ignore="MissingConstraints" />
 
         <Button
-            android:id="@+id/configurar"
+            android:id="@+id/btnConfigurar"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
@@ -53,7 +53,7 @@
             app:layout_constraintEnd_toEndOf="@+id/menu"/>
 
         <Button
-            android:id="@+id/sobre"
+            android:id="@+id/btnSobre"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="92dp"
@@ -65,17 +65,17 @@
             />
 
         <Button
-            android:id="@+id/salir"
+            android:id="@+id/btnPuntuacion"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="40dp"
             android:text="@string/puntuacion"
+            android:layout_marginTop="10dp"
             android:textSize="20sp"
             app:cornerRadius="15px"
             app:layout_constraintBottom_toBottomOf="@+id/menu"
             app:layout_constraintEnd_toEndOf="@+id/menu"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

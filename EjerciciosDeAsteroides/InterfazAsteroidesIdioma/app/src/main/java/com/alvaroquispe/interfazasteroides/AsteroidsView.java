@@ -156,6 +156,9 @@ public class AsteroidsView extends View implements SensorEventListener {
         }
     }
 
+    // ------- Estados --------
+
+
     public void activateSensors() {
         SensorManager mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);

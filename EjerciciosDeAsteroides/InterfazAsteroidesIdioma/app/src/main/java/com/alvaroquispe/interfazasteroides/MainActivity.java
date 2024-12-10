@@ -29,13 +29,15 @@ public class MainActivity extends AppCompatActivity {
     Button btnSobre;
     Button btnJugar;
     MediaPlayer mp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mp = MediaPlayer.create(this, R.raw.audio);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-//        mp= MediaPlayer.create(this, R.raw.audio);
 //        mp.start();
 
         btnJugar = findViewById(R.id.btnJugar);
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -85,22 +88,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean musica = pref.getBoolean("musica", true);
         mp = MediaPlayer.create(this, R.raw.audio);
-        if(musica){
+        if (musica) {
             mp.start();
-        }else{
+        } else {
             mp.stop();
         }
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         mp.stop();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle estadoInicial) {
+        int pos = mp.getCurrentPosition();
+        estadoInicial.putInt("musica", pos);
+        super.onSaveInstanceState(estadoInicial);
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle estadoInicial) {
+        super.onRestoreInstanceState(estadoInicial);
+        if(estadoInicial != null){
+            int pos = estadoInicial.getInt("musica");
+            mp.seekTo(pos);
+        }
     }
 
 
@@ -111,22 +131,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // ---------------------------------------------------------
-    public void mostrarGameActivity(View view){
+    public void mostrarGameActivity(View view) {
         Intent i = new Intent(this, GameActivity.class);
         startActivity(i);
     }
 
-    public void showScores(View view){
+    public void showScores(View view) {
         Intent i = new Intent(this, Scores.class);
         startActivity(i);
     }
 
-    public void mostrarViewSobre(View view){
+    public void mostrarViewSobre(View view) {
         Intent i = new Intent(this, Sobre.class);
         startActivity(i);
     }
 
-    public void launchPreferences(View view){
+    public void launchPreferences(View view) {
         Intent i = new Intent(this, PreferencesActivity.class);
         startActivity(i);
     }
@@ -134,12 +154,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id==R.id.preferences){
+        if (id == R.id.preferences) {
             //arrancar activitat preferències
             launchPreferences(null);
             return true;
         }
-        if (id == R.id.about){
+        if (id == R.id.about) {
             //arrancar activitat sobre...
             mostrarViewSobre(null);
         }
@@ -147,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // -------------------------------------------------------------
-
 
 
 }
