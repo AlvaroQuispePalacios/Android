@@ -90,6 +90,18 @@
                 android:layout_height="wrap_content"
                 android:text="0"/>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnBarraProgreso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Barra de progreso"
+            app:cornerRadius="5dp"/>
+        <TextView
+            android:id="@+id/tvMensajeBarraProgreso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""/>
     </LinearLayout>
 
 

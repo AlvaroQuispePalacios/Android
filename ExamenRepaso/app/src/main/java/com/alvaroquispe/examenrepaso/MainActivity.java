@@ -1,12 +1,16 @@
 package com.alvaroquispe.examenrepaso;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,10 +23,11 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
     TextView tvNumeroEjecucionesVector;
     TextView tvNumeroEjecucionesMapa;
+    TextView tvMensajeBarraProgreso;
     Button btnMostrarAnimacionActivity;
     Button btnMostrarVectorActivity;
     Button btnMostrarMapaActivity;
-
+    Button btnBarraProgreso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +38,10 @@ public class MainActivity extends AppCompatActivity {
         btnMostrarAnimacionActivity = findViewById(R.id.btnMostrarAnimacionActivity);
         btnMostrarVectorActivity = findViewById(R.id.btnMostrarVectorActivity);
         btnMostrarMapaActivity = findViewById(R.id.btnMostrarMapaActivity);
+        btnBarraProgreso = findViewById(R.id.btnBarraProgreso);
         tvNumeroEjecucionesVector = findViewById(R.id.tvNumeroEjecucionesVector);
         tvNumeroEjecucionesMapa = findViewById(R.id.tvNumeroEjecucionesMapa);
+        tvMensajeBarraProgreso = findViewById(R.id.tvMensajeBarraProgreso);
 
         btnMostrarAnimacionActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
                 tvNumeroEjecucionesMapa.setText(Integer.toString(contador));
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:39.887642,4.254319"));
                 startActivity(intent);
+            }
+        });
+
+        btnBarraProgreso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BarraProgreso();
             }
         });
 
@@ -105,7 +119,47 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void BarraProgreso(){
+        asynTask barraProgreso = new asynTask();
+        barraProgreso.execute(2);
+    }
+
+    private class asynTask extends AsyncTask<Integer, Integer, Integer> {
+        private ProgressDialog barraProgreso;
+        @Override
+        protected void onPreExecute(){
+            barraProgreso = new ProgressDialog(MainActivity.this);
+            barraProgreso.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            barraProgreso.setMessage("Calculando");
+            barraProgreso.setMax(100);
+            barraProgreso.setProgress(0);
+            barraProgreso.setCancelable(true);
+            barraProgreso.show();
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            for(int i = 1; i <= 10 ; i++){
+                SystemClock.sleep(1000);
+                publishProgress(i*10);
+            }
+            return params[0]*params[0];
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... var){
+            barraProgreso.setProgress(var[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Integer var){
+            tvMensajeBarraProgreso.setText("Calculo terminado " + var);
+            barraProgreso.dismiss();
+        }
 
     }
+
 
 }

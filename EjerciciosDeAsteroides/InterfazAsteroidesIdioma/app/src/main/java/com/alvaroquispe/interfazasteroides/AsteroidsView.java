@@ -14,6 +14,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -69,9 +71,18 @@ public class AsteroidsView extends View implements SensorEventListener {
 
     Drawable drawableMissile;
 
+    // ------------- Sonidos -----------------
+    SoundPool soundPool;
+    int idFire, idExplosion;
+
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Drawable drawableShip, drawableAsteroid;
+        // Sonidos
+        soundPool = new SoundPool( 5, AudioManager.STREAM_MUSIC , 0);
+        idFire = soundPool.load(context, R.raw.dispar, 0);
+        idExplosion = soundPool.load(context, R.raw.explosio, 0);
+
         // Preferencias
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         controlElegido = pref.getString("controles", "?");
@@ -321,6 +332,7 @@ public class AsteroidsView extends View implements SensorEventListener {
 
     private void destroyAsteroid(int i) {
         asteroids.remove(i);
+        soundPool.play(idExplosion, 1, 1, 0, 0, 1);
 //        missileActive = false;
     }
 
@@ -334,6 +346,7 @@ public class AsteroidsView extends View implements SensorEventListener {
 
         missiles.add(newMissile);  // Afegim el nou míssil a la llista
         missileLifetimes.add((double) Math.min(this.getWidth() / Math.abs(newMissile.getIncX()), this.getHeight() / Math.abs(newMissile.getIncY())) - 2);  // Afegim el temps de vida
+        soundPool.play(idFire, 1, 1, 1, 0, 1);
     }
 
 
