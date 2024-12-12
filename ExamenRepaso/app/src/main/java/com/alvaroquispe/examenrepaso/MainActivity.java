@@ -1,6 +1,7 @@
 package com.alvaroquispe.examenrepaso;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnMostrarVectorActivity;
     Button btnMostrarMapaActivity;
     Button btnBarraProgreso;
-
+    Button btnMostrarTeclasActivity;
+    Button btnMostrarPantallaTactilActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         btnMostrarVectorActivity = findViewById(R.id.btnMostrarVectorActivity);
         btnMostrarMapaActivity = findViewById(R.id.btnMostrarMapaActivity);
         btnBarraProgreso = findViewById(R.id.btnBarraProgreso);
+        btnMostrarTeclasActivity = (Button) findViewById(R.id.btnMostrarTeclasActivity);
+        btnMostrarPantallaTactilActivity = (Button) findViewById(R.id.btnMostrarPantallaTactilActivity);
+
         tvNumeroEjecucionesVector = findViewById(R.id.tvNumeroEjecucionesVector);
         tvNumeroEjecucionesMapa = findViewById(R.id.tvNumeroEjecucionesMapa);
         tvMensajeBarraProgreso = findViewById(R.id.tvMensajeBarraProgreso);
@@ -75,6 +80,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnMostrarTeclasActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MostrarTeclasActivity(null);
+            }
+        });
+
+        btnMostrarPantallaTactilActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MostrarPantallaTactilActivity(null);
+            }
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -91,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
         tvNumeroEjecucionesVector = findViewById(R.id.tvNumeroEjecucionesVector);
         i.putExtra("contadorVector", Integer.parseInt(tvNumeroEjecucionesVector.getText().toString()));
         startActivityForResult(i, 2);
+    }
+    public void MostrarTeclasActivity(View view){
+        Intent i = new Intent(this, Teclas.class);
+        startActivity(i);
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -111,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, PreferenciasActivity.class);
         startActivity(i);
     }
+    public void MostrarPantallaTactilActivity(View view){
+        Intent i = new Intent(this, PantallaTactilActivity.class);
+        startActivity(i);
+    }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         int id = item.getItemId();
@@ -120,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void BarraProgreso(){
         asynTask barraProgreso = new asynTask();
@@ -136,12 +164,18 @@ public class MainActivity extends AppCompatActivity {
             barraProgreso.setMax(100);
             barraProgreso.setProgress(0);
             barraProgreso.setCancelable(true);
+            barraProgreso.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
+                    asynTask.this.cancel(true);
+                }
+            });
             barraProgreso.show();
         }
 
         @Override
         protected Integer doInBackground(Integer... params) {
-            for(int i = 1; i <= 10 ; i++){
+            for(int i = 1; i <= 10 && !isCancelled(); i++){
                 SystemClock.sleep(1000);
                 publishProgress(i*10);
             }
@@ -157,6 +191,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Integer var){
             tvMensajeBarraProgreso.setText("Calculo terminado " + var);
             barraProgreso.dismiss();
+        }
+
+        @Override
+        protected void onCancelled(){
+            tvMensajeBarraProgreso.setText("Calculo cancelado");
         }
 
     }

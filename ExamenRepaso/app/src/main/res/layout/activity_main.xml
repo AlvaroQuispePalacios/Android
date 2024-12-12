@@ -102,6 +102,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""/>
+
+        <Button
+            android:id="@+id/btnMostrarTeclasActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Teclas"
+            app:cornerRadius="5dp"/>
+
+        <Button
+            android:id="@+id/btnMostrarPantallaTactilActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pantalla Tactil"
+            app:cornerRadius="5dp"/>
+
     </LinearLayout>
 
 
