@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NouPermis</string>
+    <string name="descripcio">Descripcion</string>
+    <string name="etiqueta">Etiqueta</string>
+</resources>
