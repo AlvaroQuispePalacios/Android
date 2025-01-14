@@ -13,6 +13,9 @@ public class VeureVideo extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Toast.makeText(this, "Reproduïnt Vídeo",
+                Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_veure_video);
