@@ -77,7 +77,8 @@ public class AsteroidsView extends View implements SensorEventListener {
 
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Drawable drawableShip, drawableAsteroid;
+        Drawable drawableShip;
+        Drawable drawableAsteroid;
         // Sonidos
         soundPool = new SoundPool( 5, AudioManager.STREAM_MUSIC , 0);
         idFire = soundPool.load(context, R.raw.dispar, 0);
