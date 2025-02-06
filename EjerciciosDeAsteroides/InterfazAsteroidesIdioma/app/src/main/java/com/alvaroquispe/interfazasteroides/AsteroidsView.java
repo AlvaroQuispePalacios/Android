@@ -75,6 +75,8 @@ public class AsteroidsView extends View implements SensorEventListener {
     SoundPool soundPool;
     int idFire, idExplosion;
 
+
+
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Drawable drawableShip;

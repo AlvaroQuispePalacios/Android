@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "org.example.actividad9_4"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "org.example.actividad9_4"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.SystemClock;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class ServeiOperacio extends IntentService {
 
@@ -16,6 +17,13 @@ public class ServeiOperacio extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         double n = intent.getExtras().getDouble("numero");
         SystemClock.sleep(5000);
-        MainActivity.sortida.append(n * n + "\n");
+
+        Intent i = new Intent();
+        i.setAction(ReceptorOperacio.ACTION_RESP);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.putExtra("resultado", n*n);
+
+//        sendBroadcast(i);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
     }
 }

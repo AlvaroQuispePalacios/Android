@@ -12,14 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InterfazAsteroides"
         tools:targetApi="31">
-        <activity android:name=".AsteroidsGame"
-            android:exported="false"/>
+        <receiver
+            android:name=".ReceptorBateria"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <activity
+            android:name=".AsteroidsGame"
+            android:exported="false" />
         <activity
             android:name=".GameActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Scores"
             android:exported="false" />
@@ -40,6 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".ServicioMusica" android:exported="false"/>
     </application>
 
 </manifest>

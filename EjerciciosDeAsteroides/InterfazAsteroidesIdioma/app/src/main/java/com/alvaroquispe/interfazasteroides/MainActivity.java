@@ -1,6 +1,7 @@
 package com.alvaroquispe.interfazasteroides;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -29,11 +30,12 @@ public class MainActivity extends AppCompatActivity {
     Button btnSobre;
     Button btnJugar;
     MediaPlayer mp;
+    ReceptorBateria rb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mp = MediaPlayer.create(this, R.raw.audio);
+//        mp = MediaPlayer.create(this, R.raw.audio);
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -85,6 +87,23 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // ------------ Servicio ----------------
+//        startService(new Intent(MainActivity.this, ServicioMusica.class));
+
+
+        //------------- Receptor ----------------
+        rb = new ReceptorBateria();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_LOW);
+        this.registerReceiver(rb, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.unregisterReceiver(rb);
+        stopService(new Intent(MainActivity.this, ServicioMusica.class));
     }
 
     @Override
@@ -92,24 +111,27 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean musica = pref.getBoolean("musica", true);
-        mp = MediaPlayer.create(this, R.raw.audio);
+//        mp = MediaPlayer.create(this, R.raw.audio);
         if (musica) {
-            mp.start();
+//            mp.start();
+            startService(new Intent(MainActivity.this, ServicioMusica.class));
         } else {
-            mp.stop();
+//            mp.stop();
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mp.stop();
+//        mp.stop();
+        stopService(new Intent(MainActivity.this, ServicioMusica.class));
+
     }
 
     @Override
     public void onSaveInstanceState(Bundle estadoInicial) {
-        int pos = mp.getCurrentPosition();
-        estadoInicial.putInt("musica", pos);
+//        int pos = mp.getCurrentPosition();
+//        estadoInicial.putInt("musica", pos);
         super.onSaveInstanceState(estadoInicial);
 
     }
@@ -118,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
     public void onRestoreInstanceState(Bundle estadoInicial) {
         super.onRestoreInstanceState(estadoInicial);
         if(estadoInicial != null){
-            int pos = estadoInicial.getInt("musica");
-            mp.seekTo(pos);
+//            int pos = estadoInicial.getInt("musica");
+//            mp.seekTo(pos);
         }
     }
 
