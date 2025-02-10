@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RepasoExamen89</string>
+    <string name="etiqueta">Reproducció de vídeos baix demanda </string>
+    <string name="descripcio">Permet a l\'aplicació reproduïr
+vídeos de l\'empresa PayPerView sense la teva intervenció. Se tracta
+d\'un servei no gratuït, per la qual cosa pot afectar el saldo
+de la teva compta amb aquesta empresa. Si no tens una compta
+oberta els vídeos no podran ser reproduïts. </string>
+    <string name="google_maps_key">AIzaSyC1UYs9CEi_kfIOwdNc0NdpZwzIF23jJZo</string>
+</resources>

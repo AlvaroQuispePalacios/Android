@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "org.example.repasoexamentema8_9"
+    namespace = "com.alvaroquispe.repasoexamen89"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "org.example.repasoexamentema8_9"
+        applicationId = "com.alvaroquispe.repasoexamen89"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">RepasoExamenTema8_9</string>
+    <string name="google_maps_key">AIzaSyC1UYs9CEi_kfIOwdNc0NdpZwzIF23jJZo</string>
+    <string name="string_puntaprimatext">“Platja de Punta Prima està a sis quilòmetres de Sant Lluís (l’únic nucli urbà fundat pels francesos\nen el segle XVIII), situada entre les puntes des Marbres i Prima, així mateix a devora de la\nurbanització homònima i Torre de Son Ganxo. Des de la seva vorera s’entreveu s’Illot des Cagaire\ni s’illa de l’Aire. Aquesta platja resulta d’un entrant de mar ampli, obert i de roquissars de baixa\naltura, coronats per habitatges residencials que arriben fins a primera línia de la mar.”</string>
+    <string name="sonBouTex">\"Son Bou o Platges de Son Bou està a vuit quilòmetres d’Alaior, situada entre Punta Rodona\n(alberga Torre Esfondrada, talaia defensiva del segle XIX) i Cap de ses Penyes (propera a una\nbasílica paleocristiana), així com junt a les urbanitzacions Son Bou, Sant Jaume de la\nMediterrània i Torre Solí Nou. Aquesta platja forma part de l’enorme entrant de mar, en forma\nde u, que ha originat una badia gegantina, totalment oberta a la mar.\"</string>
 </resources>
