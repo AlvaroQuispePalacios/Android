@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/playaSonBou"
+        android:title="Playa Son bou"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="100" />
+    <item android:title="Playa Punta Prima"
+        android:id="@+id/playaPuntaPrima"
+        android:icon="@android:drawable/ic_menu_info_details"/>
+</menu>

@@ -17,6 +17,11 @@ public class MainActivity extends AppCompatActivity {
     Button btnLocalizacionBasica;
     Button btnLocalizacionGoogle;
     Button btnLocalizacionGoogle2;
+    Button btnExamenRepaso;
+    Button btnServicioBloqueante;
+    Button btnServicioNoBloqueante;
+    Button btnNotificacion;
+    Button btnBroadcast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +32,46 @@ public class MainActivity extends AppCompatActivity {
         btnLocalizacionBasica = findViewById(R.id.btnLocalizacionBasica);
         btnLocalizacionGoogle = findViewById(R.id.btnLocalizacionGoogle);
         btnLocalizacionGoogle2 = findViewById(R.id.btnLocalizacionGoogle2);
+        btnExamenRepaso = findViewById(R.id.btnExamenRepaso);
+        btnServicioBloqueante = findViewById(R.id.btnServicioBloqueante);
+        btnServicioNoBloqueante = findViewById(R.id.btnServicioNoBloqueante);
+        btnNotificacion = findViewById(R.id.btnNotificacion);
+        btnBroadcast = findViewById(R.id.btnBroadcast);
+
+        btnBroadcast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarBroadcastActivity(null);
+            }
+        });
+
+        btnNotificacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarNotificacionActivity(null);
+            }
+        });
+
+        btnServicioNoBloqueante.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarServicioNoBloqueante(null);
+            }
+        });
+
+        btnServicioBloqueante.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarServicioBloqueante(null);
+            }
+        });
+
+        btnExamenRepaso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mostrarExamenRepaso(null);
+            }
+        });
 
         btnLocalizacionGoogle2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +112,31 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void mostrarBroadcastActivity(View view) {
+        Intent i = new Intent(this, BroadcastActivity.class);
+        startActivity(i);
+    }
+
+    private void mostrarNotificacionActivity(View view) {
+        Intent i = new Intent(this, NotificacionActivity.class);
+        startActivity(i);
+    }
+
+    private void mostrarServicioNoBloqueante(View view){
+        Intent i = new Intent(this, ServicioNoBloqueante.class);
+        startActivity(i);
+    }
+
+    private void mostrarServicioBloqueante(View view){
+        Intent i = new Intent(this, ServicioBloqueante.class);
+        startActivity(i);
+    }
+
+    private void mostrarExamenRepaso(View view) {
+        Intent i = new Intent(this, ExamenRepaso.class);
+        startActivity(i);
     }
 
     private void mostrarLocalizarGoogle2(View view) {

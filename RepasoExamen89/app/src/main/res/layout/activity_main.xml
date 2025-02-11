@@ -47,6 +47,39 @@
             android:text="Localizacion Google 2"
             />
 
+        <Button
+            android:id="@+id/btnExamenRepaso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="examenRepaso"
+            />
+        <Button
+            android:id="@+id/btnServicioBloqueante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Servicio bloqueante"
+            />
+
+        <Button
+            android:id="@+id/btnServicioNoBloqueante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Servicio No bloqueante"
+            />
+
+        <Button
+            android:id="@+id/btnNotificacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notificacion"
+            />
+
+        <Button
+            android:id="@+id/btnBroadcast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Broadcast 1"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
