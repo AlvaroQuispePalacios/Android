@@ -1,7 +1,9 @@
 package com.alvaroquispe.interfazasteroides;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -13,6 +15,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         gameView = (AsteroidsView) findViewById(R.id.AsteroidsView);
+        gameView.setParent(this);
     }
 
     @Override protected void onPause() {
@@ -30,4 +33,6 @@ public class GameActivity extends AppCompatActivity {
         gameView.deactivateSensors();
         super.onDestroy();
     }
+
+
 }

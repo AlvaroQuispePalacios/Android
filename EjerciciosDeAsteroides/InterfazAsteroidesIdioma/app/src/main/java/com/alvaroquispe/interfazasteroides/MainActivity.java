@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -97,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_LOW);
         this.registerReceiver(rb, filter);
+
+
+        // ---- Almacenar datos -----
+        scoreStorage = new ScoreStoragePreferences(this);
     }
 
     @Override
@@ -155,7 +160,23 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------
     public void mostrarGameActivity(View view) {
         Intent i = new Intent(this, GameActivity.class);
-        startActivity(i);
+        // i put extras
+//        i.putExtra("score", score);
+//        startActivity(i);
+        startActivityForResult(i, 1234);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1234 && resultCode==RESULT_OK && data != null){
+            int score = data.getExtras().getInt("score");
+            String name = "Yo";
+            scoreStorage.storeScore(score, name, System.currentTimeMillis());
+            showScores(null);
+
+        }
     }
 
     public void showScores(View view) {

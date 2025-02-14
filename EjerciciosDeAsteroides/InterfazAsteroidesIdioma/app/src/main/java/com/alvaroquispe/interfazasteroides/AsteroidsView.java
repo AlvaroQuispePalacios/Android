@@ -1,6 +1,8 @@
 package com.alvaroquispe.interfazasteroides;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,6 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AsteroidsView extends View implements SensorEventListener {
+    // Almacenamiento de datos
+    private int score = 0;
+    private Activity parent;
+
 
     /////// SPACESHIP //////
     private AsteroidsGraphic ship; // Gràfic de la nau
@@ -74,8 +80,6 @@ public class AsteroidsView extends View implements SensorEventListener {
     // ------------- Sonidos -----------------
     SoundPool soundPool;
     int idFire, idExplosion;
-
-
 
     public AsteroidsView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -168,6 +172,19 @@ public class AsteroidsView extends View implements SensorEventListener {
         if (controlElegido.equals("2")) {
             activateSensors();
         }
+    }
+    // ------ Almacenamiento de datos -------
+    public void setParent(Activity parent){
+        this.parent = parent;
+    }
+
+    private void terminate() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("score", score);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        parent.setResult(Activity.RESULT_OK, intent);
+        parent.finish();
     }
 
     // ------- Estados --------
@@ -331,12 +348,27 @@ public class AsteroidsView extends View implements SensorEventListener {
                 }
             }
         }
+
+        // Almacenamiento de datos
+        // termina la partida si un asteroide choca con la nave
+        for(AsteroidsGraphic asteroid : asteroids){
+            if(asteroid.checkCollision(ship)){
+                terminate();
+            }
+        }
     }
 
     private void destroyAsteroid(int i) {
         asteroids.remove(i);
         soundPool.play(idExplosion, 1, 1, 0, 0, 1);
 //        missileActive = false;
+        // Almacenamiento de datos
+        score += 1000;
+        // Termina el juego si hay asteroides en el mapa
+        if(asteroids.isEmpty()){
+            terminate();
+        }
+
     }
 
     private void fireMissile() {
