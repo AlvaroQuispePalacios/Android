@@ -101,7 +101,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         // ---- Almacenar datos -----
-        scoreStorage = new ScoreStoragePreferences(this);
+//        scoreStorage = new ScoreStoragePreferences(this);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String almacenar = pref.getString("storage", "?");
+        switch (almacenar){
+            case "0":
+                Log.e("MainActivity", "Elegiste array ");
+                break;
+            case "1":
+                scoreStorage = new ScoreStoragePreferences(this);
+                break;
+            case "2":
+                scoreStorage = new ScoreStorageInternalFile(this);
+                break;
+
+        }
+//        scoreStorage = new ScoreStorageInternalFile(this);
+
     }
 
     @Override

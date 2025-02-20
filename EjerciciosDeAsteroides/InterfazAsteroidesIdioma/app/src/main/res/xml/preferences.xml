@@ -17,6 +17,14 @@
         android:entryValues="@array/tipusGraficsValors"
         android:defaultValue="1"/>
 
+    <ListPreference
+        android:key="storage"
+        android:title="Tipo de guardado"
+        android:summary="Escoger como se guadará los scores"
+        android:entries="@array/tipoDeGuardado"
+        android:entryValues="@array/tipoDeGuardadoValores"
+        android:defaultValue="1"/>
+
     <EditTextPreference
         android:key="fragments"
         android:title="Número de fragments"

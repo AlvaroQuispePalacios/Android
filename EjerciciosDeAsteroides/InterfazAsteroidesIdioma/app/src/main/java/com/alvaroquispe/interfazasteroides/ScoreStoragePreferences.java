@@ -22,14 +22,27 @@ public class ScoreStoragePreferences implements ScoreStorage {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("score", score + " " + name);
         editor.commit();
+//        for (int i = 0; i < 10; i++) {
+//
+//            editor.putString("score" + i,  prefs.getString("score" + (i - 1), ""));
+//
+//            editor.commit();
+//        }
     }
 
     @Override
     public List<String> getScoreList(int maxNo) {
         List<String> result = new ArrayList<String>();
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+//        for (int i = 0; i < 10; i++) {
+//            String s = prefs.getString("score" + i, "");
+//            System.out.println(s);
+//            if(!s.isEmpty()){
+//                result.add(s);
+//            }
+//        }
         String s = prefs.getString("score", "");
-        if(!s.isEmpty()){
+        if (!s.isEmpty()) {
             result.add(s);
         }
         return result;

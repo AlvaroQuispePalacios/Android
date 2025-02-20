@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="tipoDeGuardado">
+        <item>Array</item>
+        <item>Preferencias</item>
+        <item>Fichero interno</item>
+    </string-array>
+
+    <string-array name="tipoDeGuardadoValores">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="tipusGrafics">
         <item>vectorial</item>
         <item>bitmap</item>
