@@ -1,10 +1,11 @@
 package com.alvaroquispe.interfazasteroides;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -12,24 +13,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ScoreStorageInternalFile implements ScoreStorage {
-    private static String FILE = "scores.txt";
+public class ScoreStorageApplicationFile implements ScoreStorage{
+    private File file;
     private Context context;
 
-    public ScoreStorageInternalFile(Context context){
+    public ScoreStorageApplicationFile(Context context){
         this.context = context;
+        this.file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "scores.txt");
     }
 
     @Override
     public void storeScore(int score, String name, long date) {
-        // escribe en el archivo scores.txt
-        try{
-            FileOutputStream file = context.openFileOutput(FILE, Context.MODE_APPEND);
+        try {
+            FileOutputStream f = new FileOutputStream(file);
             String text = score + " " + name + "\n";
-            file.write(text.getBytes());
-            file.close();
+            f.write(text.getBytes());
+            f.close();
         }catch (Exception ex){
             Log.e("Asteroride", ex.getMessage());
+
         }
     }
 
@@ -38,8 +40,8 @@ public class ScoreStorageInternalFile implements ScoreStorage {
         List<String> result = new ArrayList<String>();
         try {
             // lee el archivo score.txt
-            FileInputStream file = context.openFileInput(FILE);
-            BufferedReader inReader = new BufferedReader(new InputStreamReader(file));
+            FileInputStream f = new FileInputStream(file);
+            BufferedReader inReader = new BufferedReader(new InputStreamReader(f));
 
             // lee linea a linea
             int n = 0;
@@ -51,7 +53,7 @@ public class ScoreStorageInternalFile implements ScoreStorage {
                     n++;
                 }
             }while(n < maxNo && line != null);
-            file.close();
+            f.close();
         }catch (Exception ex){
             Log.e("Asteroride", ex.getMessage(), ex);
 

@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -110,10 +111,21 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "1":
                 scoreStorage = new ScoreStoragePreferences(this);
+
                 break;
             case "2":
                 scoreStorage = new ScoreStorageInternalFile(this);
                 break;
+            case "3":
+                scoreStorage = new ScoreStorageExternalFile(this);
+                break;
+            case "4":
+                scoreStorage = new ScoreStorageApplicationFile(this);
+                Toast.makeText(this, "Se eligio guardar en documentos", Toast.LENGTH_SHORT).show();
+
+                break;
+            default:
+                Toast.makeText(this, "Algo paso", Toast.LENGTH_SHORT).show();
 
         }
 //        scoreStorage = new ScoreStorageInternalFile(this);
