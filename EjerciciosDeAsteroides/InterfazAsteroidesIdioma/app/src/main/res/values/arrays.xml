@@ -6,6 +6,8 @@
         <item>Fichero interno</item>
         <item>Fichero externo</item>
         <item>Guardar en Documentos</item>
+        <item>Guardar en SQLite</item>
+        <item>Guardar en Socket</item>
     </string-array>
 
     <string-array name="tipoDeGuardadoValores">
@@ -14,6 +16,8 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="tipusGrafics">

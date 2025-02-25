@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "1":
                 scoreStorage = new ScoreStoragePreferences(this);
-
                 break;
             case "2":
                 scoreStorage = new ScoreStorageInternalFile(this);
@@ -122,11 +121,19 @@ public class MainActivity extends AppCompatActivity {
             case "4":
                 scoreStorage = new ScoreStorageApplicationFile(this);
                 Toast.makeText(this, "Se eligio guardar en documentos", Toast.LENGTH_SHORT).show();
-
+                break;
+            case "5":
+                scoreStorage = new ScoreStorageSQLite(this);
+                Toast.makeText(this, "Se eligio guardar en SQLite", Toast.LENGTH_SHORT).show();
+                break;
+            case "6":
+                scoreStorage = new ScoreStorageSocket(this);
+                Toast.makeText(this, "Se eligio guardar mediante Sockets", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(this, "Algo paso", Toast.LENGTH_SHORT).show();
 
+                // 10.0.2.2
         }
 //        scoreStorage = new ScoreStorageInternalFile(this);
 
