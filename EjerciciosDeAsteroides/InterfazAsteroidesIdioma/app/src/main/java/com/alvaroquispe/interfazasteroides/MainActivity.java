@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "1":
                 scoreStorage = new ScoreStoragePreferences(this);
+                Toast.makeText(this, "Se eligio guardar en preferencias", Toast.LENGTH_SHORT).show();
+
                 break;
             case "2":
                 scoreStorage = new ScoreStorageInternalFile(this);

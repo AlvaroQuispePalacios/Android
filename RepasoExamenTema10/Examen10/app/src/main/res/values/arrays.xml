@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tipoGuardado" >
+        <item>Guadar en Preferencioas</item>
+        <item>Guadar en Fichero Interno</item>
+        <item>Guadar en Fichero Externo</item>
+        <item>Guardar en documentos</item>
+        <item>SQLite</item>
+
+    </string-array>
+    <string-array name="tiposGuardadoValores">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+</resources>
