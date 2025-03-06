@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="tipoGuardado"
+        android:title="Tipos de guardado"
+        android:summary="A"
+        android:entries="@array/tiposGuardado"
+        android:entryValues="@array/tiposGuardadoValores"
+        android:defaultValue="1"/>
+</PreferenceScreen>
