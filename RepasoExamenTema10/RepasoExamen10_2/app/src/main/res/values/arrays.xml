@@ -4,6 +4,7 @@
         <item>Guardar en Preferencias</item>
         <item>Guardar en Fichero interno</item>
         <item>Guardar en Fichero externo</item>
+        <item>Guardar en Descargas</item>
         <item>Guardar en SQLite</item>
 
     </string-array>
@@ -12,5 +13,7 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
+
     </string-array>
 </resources>
