@@ -37,6 +37,7 @@ public class VerContactosActivity extends AppCompatActivity {
         String tipoGuardado = prefsDefault.getString("tipoGuardado", "");
 
         cargarContacto(tipoGuardado);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
